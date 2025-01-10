@@ -23,8 +23,8 @@ Node* LRRotation(Node* p);
 Node* RLRotation(Node* p);
 Node* InPre(Node* p);
 Node* InSucc(Node* p);
-Node* rInsert(Node* p, int key);
-Node* Delete(Node* p, int key);
+Node* rInsert(Node* p, char* key);
+Node* Delete(Node* p, char* key);
 void Inorder(Node* p);
 void FreeTree(Node* p);
 

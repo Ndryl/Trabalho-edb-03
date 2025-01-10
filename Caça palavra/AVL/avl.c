@@ -124,7 +124,7 @@ Node* rInsert(Node* p, char* key) {
 }
 
 // Remoção balanceada
-Node* Delete(Node* p, int key) {
+Node* Delete(Node* p, char* key) {
     if (p == NULL) {
         return NULL;
     }
@@ -170,7 +170,7 @@ Node* Delete(Node* p, int key) {
 void Inorder(Node* p) {
     if (p) {
         Inorder(p->lchild);
-        printf("%d ", p->word);
+        printf("%s ", p->word);
         Inorder(p->rchild);
     }
 }
