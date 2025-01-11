@@ -69,4 +69,4 @@ MPLAE
 PEMLO
 LOEXM
 
-A palavra 'EXEMPLO' foi encontrada!
+A palavra 'EXEMPLO' não foi encontrada!
