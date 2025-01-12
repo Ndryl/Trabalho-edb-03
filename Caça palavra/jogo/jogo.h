@@ -7,12 +7,16 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include "../trie/trie.h"
 
 char** carregarCacaPalavras(char* filename, int* dimensao);
-void normalizar_string(const char* origem, char* destino);
 void liberarMatriz(char** matriz, int linhas);
 void imprimirMatriz(char** matriz, int dimensao);
 bool contemSubstring(const char *str, const char *sub);
-bool findWord(char **matriz, int dimensao, const char *sub);
+bool findWord(char** matriz, int dimensao, trienode* root);
+bool buscarPalavra(char** matriz, int dimensao, int x, int y, trienode* node, bool** visitado) ;
+void normalizarString(const char* origem, char* destino);
+
+bool isValid(int x, int y, int dimensao, bool** visitado);
 
 #endif
