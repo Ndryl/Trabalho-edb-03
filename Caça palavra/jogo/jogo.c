@@ -2,7 +2,6 @@
 
 
 void normalizarString(const char* origem, char* destino) {
-    
     const char* acentuados = "áàâãäéèêëíìîïóòôõöúùûüçÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ";
     const char* nao_acentuados = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
 
@@ -11,15 +10,14 @@ void normalizarString(const char* origem, char* destino) {
         char c = origem[i];
         const char* p = strchr(acentuados, c);
         if (p) {
-            // Substitui o caractere acentuado pelo correspondente sem acento
-            destino[j++] = toupper(nao_acentuados[p - acentuados]);
-        } else {
-            // Converte para maiúscula
-            destino[j++] = toupper(c);
+            destino[j++] = nao_acentuados[p - acentuados];
+        } else if (isalpha(c)) {
+            destino[j++] = toupper(c);  // Converte para maiúscula
         }
     }
-    destino[j] = '\0'; // Termina a string
+    destino[j] = '\0';  // Finaliza a string
 }
+
 void strrev(char *str) {
     int len = strlen(str);
     for (int i = 0; i < len / 2; i++) {
