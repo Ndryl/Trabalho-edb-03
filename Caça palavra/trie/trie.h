@@ -12,8 +12,11 @@ typedef struct trienode {
     bool terminal;                        // Indica se o nó é o final de uma palavra (true) ou não (false)
 } trienode;
 trienode *createnode();
-bool trieinsert(trienode **root, char *word) ;
+bool trieinsert(trienode **root, char *word);
 void printTries(trienode *root, char *prefix, int length);
+bool trieSearch(trienode *root, const char *word);
+void liberarTrie(trienode *root);
+trienode* buscarNo(trienode *root, const char *word);
 
 
 

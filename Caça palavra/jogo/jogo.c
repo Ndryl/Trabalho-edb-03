@@ -1,8 +1,7 @@
 #include "jogo.h"
 
 
-void normalizar_string(const char* origem, char* destino) {
-    
+void normalizarString(const char* origem, char* destino) {
     const char* acentuados = "áàâãäéèêëíìîïóòôõöúùûüçÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ";
     const char* nao_acentuados = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
 
@@ -11,14 +10,12 @@ void normalizar_string(const char* origem, char* destino) {
         char c = origem[i];
         const char* p = strchr(acentuados, c);
         if (p) {
-            // Substitui o caractere acentuado pelo correspondente sem acento
-            destino[j++] = toupper(nao_acentuados[p - acentuados]);
-        } else {
-            // Converte para maiúscula
-            destino[j++] = toupper(c);
+            destino[j++] = nao_acentuados[p - acentuados];
+        } else if (isalpha(c)) {
+            destino[j++] = toupper(c);  // Converte para maiúscula
         }
     }
-    destino[j] = '\0'; // Termina a string
+    destino[j] = '\0';  // Finaliza a string
 }
 
 void strrev(char *str) {
@@ -29,11 +26,9 @@ void strrev(char *str) {
         str[len - i - 1] = temp;
     }
 }
-
 bool contemSubstring(const char *str, const char *sub) {
     return strstr(str, sub) != NULL; // Retorna true se encontrar a substring
 }
-
 char** carregarCacaPalavras(char* filename, int* dimensao) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
@@ -81,7 +76,7 @@ char** carregarCacaPalavras(char* filename, int* dimensao) {
         }
 
         // Normaliza e copia a linha para a matriz
-        normalizar_string(buffer, matriz[num_linhas]);
+        normalizarString(buffer, matriz[num_linhas]);
 
         num_linhas++;
     }
@@ -98,7 +93,6 @@ char** carregarCacaPalavras(char* filename, int* dimensao) {
     *dimensao = num_linhas; // Define a dimensão para o chamador
     return matriz;
 }
-
 void liberarMatriz(char** matriz, int linhas) {
     if (matriz) {
         for (int i = 0; i < linhas; i++) {
@@ -107,144 +101,74 @@ void liberarMatriz(char** matriz, int linhas) {
         free(matriz);
     }
 }
-
 void imprimirMatriz(char** matriz, int dimensao) {
     for (int i = 0; i < dimensao; i++) {
         printf("%s\n", matriz[i]);
     }
 }
 
-bool findWord(char **matriz, int dimensao, const char *sub) {
-    if (matriz == NULL || sub == NULL) {
+bool isValid(int x, int y, int dimensao, bool** visitado) {
+    return x >= 0 && x < dimensao && y >= 0 && y < dimensao && !visitado[x][y];
+}
+
+// Busca recursiva a partir de uma célula
+bool buscarPalavra(char** matriz, int dimensao, int x, int y, trienode* node, bool** visitado) {
+    if (node == NULL) {
         return false;
     }
 
-    int sub_len = strlen(sub);
+    if (node->terminal) {
+        return true;
+    }
 
-    // Verifica cada linha
+    if (!isValid(x, y, dimensao, visitado)) {
+        return false;
+    }
+
+    int index = matriz[x][y] - 'A';
+    if (node->children[index] == NULL) {
+        return false;
+    }
+
+    visitado[x][y] = true;
+
+    int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+    for (int i = 0; i < 8; i++) {
+        if (buscarPalavra(matriz, dimensao, x + dx[i], y + dy[i], node->children[index], visitado)) {
+            return true;
+        }
+    }
+
+    visitado[x][y] = false; // Marca como não visitado para outras buscas
+    return false;
+}
+
+
+// Função principal para verificar se a palavra existe na matriz
+bool findWord(char** matriz, int dimensao, trienode* root) {
+    bool** visitado = (bool**)malloc(dimensao * sizeof(bool*));
     for (int i = 0; i < dimensao; i++) {
-        if (contemSubstring(matriz[i], sub)) {
-            return true;
-        }
-
-        char *inversa = malloc((strlen(matriz[i]) + 1) * sizeof(char));
-        if (inversa == NULL) {
-            printf("Erro ao alocar memória\n");
-            return false;
-        }
-        strcpy(inversa, matriz[i]);
-        strrev(inversa);  // Reverte a linha
-
-        if (contemSubstring(inversa, sub)) {
-            free(inversa);
-            return true;
-        }
-
-        free(inversa);
+        visitado[i] = (bool*)calloc(dimensao, sizeof(bool));
     }
 
-    // Verifica cada coluna
-    for (int j = 0; j < dimensao; j++) {
-        char *coluna = malloc((dimensao + 1) * sizeof(char));
-        if (coluna == NULL) {
-            printf("Erro ao alocar memória\n");
-            return false;
-        }
-
-        for (int i = 0; i < dimensao; i++) {
-            coluna[i] = matriz[i][j];
-        }
-        coluna[dimensao] = '\0';
-
-        if (contemSubstring(coluna, sub)) {
-            free(coluna);
-            return true;
-        }
-
-        char *inversa = malloc((dimensao + 1) * sizeof(char));
-        if (inversa == NULL) {
-            printf("Erro ao alocar memória\n");
-            return false;
-        }
-        strcpy(inversa, coluna);
-        strrev(inversa);  // Reverte a coluna
-
-        if (contemSubstring(inversa, sub)) {
-            free(coluna);
-            free(inversa);
-            return true;
-        }
-
-        free(coluna);
-        free(inversa);
-    }
-
-    // Diagonais principais
-    for (int k = 0; k < dimensao; k++) {
-        char diagonal[dimensao + 1];
-        int idx = 0;
-
-        // Diagonal iniciando em (k, 0)
-        for (int i = k, j = 0; i < dimensao && j < dimensao; i++, j++) {
-            diagonal[idx++] = matriz[i][j];
-        }
-        diagonal[idx] = '\0';
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-        strrev(diagonal);
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-
-        // Diagonal iniciando em (0, k)
-        idx = 0;
-        for (int i = 0, j = k; i < dimensao && j < dimensao; i++, j++) {
-            diagonal[idx++] = matriz[i][j];
-        }
-        diagonal[idx] = '\0';
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-        strrev(diagonal);
-        if (contemSubstring(diagonal, sub)) {
-            return true;
+    for (int i = 0; i < dimensao; i++) {
+        for (int j = 0; j < dimensao; j++) {
+            if (buscarPalavra(matriz, dimensao, i, j, root, visitado)) {
+                for (int k = 0; k < dimensao; k++) {
+                    free(visitado[k]);
+                }
+                free(visitado);
+                return true;
+            }
         }
     }
 
-    // Diagonais secundárias
-    for (int k = 0; k < dimensao; k++) {
-        char diagonal[dimensao + 1];
-        int idx = 0;
-
-        // Diagonal iniciando em (k, dimensao-1)
-        for (int i = k, j = dimensao - 1; i < dimensao && j >= 0; i++, j--) {
-            diagonal[idx++] = matriz[i][j];
-        }
-        diagonal[idx] = '\0';
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-        strrev(diagonal);
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-
-        // Diagonal iniciando em (0, dimensao-1-k)
-        idx = 0;
-        for (int i = 0, j = dimensao - 1 - k; i < dimensao && j >= 0; i++, j--) {
-            diagonal[idx++] = matriz[i][j];
-        }
-        diagonal[idx] = '\0';
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
-        strrev(diagonal);
-        if (contemSubstring(diagonal, sub)) {
-            return true;
-        }
+    for (int i = 0; i < dimensao; i++) {
+        free(visitado[i]);
     }
-
+    free(visitado);
     return false;
 }
 

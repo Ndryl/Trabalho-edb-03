@@ -2,41 +2,48 @@
 
 
 int main() {
-    // Exemplo de matriz fixa para testar a função findWord
-    int dimensao = 5;
-    char* matriz[5] = {
-        "EXEMP",
-        "EXAMP",
-        "MPLAE",
-        "PEMLO",
-        "LOEXM"
-    };
-        char* matrizDois[5] = {
-        "OXEMP",
-        "EAAMP",
-        "MPIAE",
-        "PEMVO",
-        "LOEXA"
-    };
-    
-    
+    char* filename = "cacaPalavra.txt";
+    int dimensao = 0;
 
-    // Palavra a ser procurada
-    const char* palavra = "EXEMPLO"; // Troque para qualquer palavra que deseja buscar
-      const char* palavraDois = "AVIAO";
-
-    // Testa a função findWord
-    if (findWord(matriz, dimensao, palavra)) {
-        printf("A palavra '%s' foi encontrada!\n", palavra);
-    } else {
-        printf("A palavra '%s' não foi encontrada.\n", palavra);
+    // Carregar matriz
+    printf("Carregando a matriz de caça-palavras...\n");
+    char** matriz = carregarCacaPalavras(filename, &dimensao);
+    if (matriz == NULL) {
+        printf("Erro ao carregar a matriz de caça-palavras.\n");
+        return 1;
     }
-     if (findWord(matrizDois, dimensao, palavraDois)) {
-        printf("A palavra '%s' foi encontrada!\n", palavraDois);
-    } else {
-        printf("A palavra '%s' não foi encontrada.\n", palavraDois);
+    printf("Matriz de dimensão %dx%d carregada com sucesso!\n", dimensao, dimensao);
+    imprimirMatriz(matriz, dimensao);
+
+    // Criar e popular o Trie
+    printf("Criando o Trie com palavras...\n");
+    trienode* root = NULL;
+    char palavra_normalizada[100];
+
+    char* palavras_inserir[] = {"PAO", "AVIAO", "CRIA", "OVA"};
+    for (int i = 0; i < 4; i++) {
+        normalizarString(palavras_inserir[i], palavra_normalizada);
+        trieinsert(&root, palavra_normalizada);
+        printf("Palavra '%s' inserida no Trie.\n", palavras_inserir[i]);
     }
 
+    // Verificar palavras na matriz
+    printf("\nVerificando palavras na matriz...\n");
+    char* palavras[] = {"CASA", "CARRO", "ÁRVORE", "GATO", "PAO", "AVIAO", "CRIA", "OVA"};
+    int num_palavras = sizeof(palavras) / sizeof(palavras[0]);
+
+    for (int i = 0; i < num_palavras; i++) {
+        normalizarString(palavras[i], palavra_normalizada);
+        if (findWord(matriz, dimensao, buscarNo(root, palavra_normalizada))) {
+            printf("Palavra '%s' encontrada.\n", palavras[i]);
+        } else {
+            printf("Palavra '%s' NÃO encontrada.\n", palavras[i]);
+        }
+    }
+
+    // Liberar memória
+    liberarTrie(root);
+    liberarMatriz(matriz, dimensao);
 
     return 0;
 }
