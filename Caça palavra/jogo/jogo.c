@@ -29,30 +29,34 @@ void strrev(char *str) {
 bool contemSubstring(const char *str, const char *sub) {
     return strstr(str, sub) != NULL; // Retorna true se encontrar a substring
 }
-char** carregarCacaPalavras(char* filename, int* dimensao) {
-    FILE* file = fopen(filename, "r");
+char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
+   FILE* file = fopen(filename, "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo\n");
+        return NULL;
+    }
+
+    // Lê a altura e largura da primeira linha do arquivo
+    if (fscanf(file, "%d %d\n", altura, largura) != 2) {
+        printf("Erro ao ler altura e largura do arquivo\n");
+        fclose(file);
         return NULL;
     }
 
     char buffer[1030];
     char** matriz = NULL;
     int num_linhas = 0;
-    int max_colunas = 0;
 
+    // Lê o restante das linhas do arquivo
     while (fgets(buffer, sizeof(buffer), file)) {
         // Remove o '\n' do final da linha
         buffer[strcspn(buffer, "\n")] = '\0';
 
         int len = strlen(buffer);
-        if (num_linhas == 0) {
-            max_colunas = len; // Define o número de colunas na primeira linha
-        }
 
-        // Verifica se o comprimento das linhas é consistente
-        if (len != max_colunas) {
-            printf("Caça-palavras formato errado\n");
+        // Verifica se o comprimento das linhas é consistente com a largura informada
+        if (len != *largura) {
+            printf("Caça-palavras formato errado: largura inconsistente\n");
             fclose(file);
             liberarMatriz(matriz, num_linhas);
             return NULL;
@@ -83,15 +87,13 @@ char** carregarCacaPalavras(char* filename, int* dimensao) {
 
     fclose(file);
 
-    // Verifica se o número de linhas é igual ao número de colunas
-    
-    if (num_linhas != max_colunas) {
-        printf("Caça-palavras formato errado\n");
+    // Verifica se o número de linhas é consistente com a altura informada
+    if (num_linhas != *altura) {
+        printf("Caça-palavras formato errado: altura inconsistente\n");
         liberarMatriz(matriz, num_linhas);
         return NULL;
     }
 
-    *dimensao = num_linhas; // Define a dimensão para o chamador
     return matriz;
 }
 
@@ -158,7 +160,7 @@ void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, 
 
 // Função principal para encontrar palavras da Trie no caça-palavras
 // Por enquanto, não adiciona em uma avl, apenas retorna um array de strings de palavras encontradas
-char **encontrarPalavrasNaTrie(char **matriz, int largura, int altura, trienode *raiz, int *quantidadePalavras) {
+char **encontrarPalavrasNaTrie(char **matriz, int altura, int largura, trienode *raiz, int *quantidadePalavras) {
     // Vetores para as 8 direções possíveis
     int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
     int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};

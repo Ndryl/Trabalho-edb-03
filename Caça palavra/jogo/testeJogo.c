@@ -6,16 +6,16 @@ int main() {
     char* words_filename = "palavras.txt";
     int dimensao = 0;
     int largura = -1;
-    int altura = 01;
+    int altura = -1;
 
     // Carregar matriz
     printf("Carregando a matriz de caça-palavras...\n");
-    char** matriz = carregarCacaPalavras(filename, &dimensao);
+    char** matriz = carregarCacaPalavras(filename, &altura, &largura);
     if (matriz == NULL) {
         printf("Erro ao carregar a matriz de caça-palavras.\n");
         return 1;
     }
-    printf("Matriz de dimensão %dx%d carregada com sucesso!\n", dimensao, dimensao);
+    printf("Matriz de dimensão %dx%d carregada com sucesso!\n", altura, largura);
     imprimirMatriz(matriz, dimensao);
     
     // Criar e popular o Trie
@@ -28,7 +28,7 @@ int main() {
     printTries(root, "", 0);
 
     int quantidadePalavras = 5;
-    char** palavras_econtradas = encontrarPalavrasNaTrie(matriz, 5, 5, root, &quantidadePalavras);
+    char** palavras_econtradas = encontrarPalavrasNaTrie(matriz, altura, largura, root, &quantidadePalavras);
     printf("Quantidade de palavras encontradas: %d\n", quantidadePalavras);
     for(int i = 0; i < quantidadePalavras; i++) {
         printf("%s ENCONTRADA\n", palavras_econtradas[i]);
