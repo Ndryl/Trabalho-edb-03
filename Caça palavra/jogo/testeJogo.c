@@ -3,7 +3,10 @@
 
 int main() {
     char* filename = "cacaPalavra.txt";
+    char* words_filename = "palavras.txt";
     int dimensao = 0;
+    int largura = -1;
+    int altura = 01;
 
     // Carregar matriz
     printf("Carregando a matriz de caça-palavras...\n");
@@ -18,15 +21,11 @@ int main() {
     // Criar e popular o Trie
     printf("Criando o Trie com palavras...\n");
     trienode* root = NULL;
-    char palavra_normalizada[100];
 
-    char* palavras_inserir[] = {"PAO", "AVIAO", "CRIA", "OVA", "teste", "oicio"};
-    int tam = 6;
-    for (int i = 0; i < tam; i++) {
-        normalizarString(palavras_inserir[i], palavra_normalizada);
-        trieinsert(&root, palavra_normalizada);
-        printf("Palavra '%s' inserida no Trie.\n", palavra_normalizada);
-    }
+    carregarPalavras(words_filename, &root);
+    //PRINT TRIE:
+    printf("arvore atual:\n");
+    printTries(root, "", 0);
 
     int quantidadePalavras = 5;
     char** palavras_econtradas = encontrarPalavrasNaTrie(matriz, 5, 5, root, &quantidadePalavras);

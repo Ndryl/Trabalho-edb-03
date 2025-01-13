@@ -84,6 +84,7 @@ char** carregarCacaPalavras(char* filename, int* dimensao) {
     fclose(file);
 
     // Verifica se o número de linhas é igual ao número de colunas
+    
     if (num_linhas != max_colunas) {
         printf("Caça-palavras formato errado\n");
         liberarMatriz(matriz, num_linhas);
@@ -93,6 +94,26 @@ char** carregarCacaPalavras(char* filename, int* dimensao) {
     *dimensao = num_linhas; // Define a dimensão para o chamador
     return matriz;
 }
+
+void carregarPalavras(char* filename, trienode** root) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+    char normalizada[100];
+    char line[1024];
+    while (fgets(line, sizeof(line), file)) {
+        
+        char* word = strtok(line, " \t\n");
+        while (word) {
+            normalizarString(word, normalizada);
+            trieinsert(root, normalizada);
+            word = strtok(NULL, " \t\n"); 
+        }
+    }
+}
+
 void liberarMatriz(char** matriz, int linhas) {
     if (matriz) {
         for (int i = 0; i < linhas; i++) {

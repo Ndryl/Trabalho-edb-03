@@ -99,7 +99,7 @@ void printTries(trienode *root, char *prefix, int length) {
     for (int i = 0; i < NUM_CHARS; i++) {
         if (root->children[i] != NULL) {
          
-            newprefix[length] = 'a' + i;
+            newprefix[length] = 'A' + i;
             printTries(root->children[i], newprefix, length + 1); 
         }
     }
