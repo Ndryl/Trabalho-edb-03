@@ -15,7 +15,6 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura);
 void carregarPalavras(char* filename, trienode **root);
 void liberarMatriz(char** matriz, int linhas);
 void imprimirMatriz(char** matriz, int dimensao);
-bool contemSubstring(const char *str, const char *sub);
 void normalizarString(const char* origem, char* destino);
 
 void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, trienode *raiz, Node **avl);

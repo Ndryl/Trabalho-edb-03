@@ -35,6 +35,6 @@ int main() {
 
     liberarMatriz(matriz, dimensao);
     liberarTrie(root);
-
+    FreeTree(avl);
     return 0;
 }

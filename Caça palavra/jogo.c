@@ -18,17 +18,6 @@ void normalizarString(const char* origem, char* destino) {
     destino[j] = '\0';  // Finaliza a string
 }
 
-void strrev(char *str) {
-    int len = strlen(str);
-    for (int i = 0; i < len / 2; i++) {
-        char temp = str[i];
-        str[i] = str[len - i - 1];
-        str[len - i - 1] = temp;
-    }
-}
-bool contemSubstring(const char *str, const char *sub) {
-    return strstr(str, sub) != NULL; // Retorna true se encontrar a substring
-}
 char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
