@@ -107,72 +107,54 @@ void imprimirMatriz(char** matriz, int dimensao) {
     }
 }
 
-bool isValid(int x, int y, int dimensao, bool** visitado) {
-    return x >= 0 && x < dimensao && y >= 0 && y < dimensao && !visitado[x][y];
-}
-
-// Busca recursiva a partir de uma célula
-bool buscarPalavra(char** matriz, int dimensao, int x, int y, trienode* node, bool** visitado) {
-    if (node == NULL) {
-        return false;
-    }
-
-    if (node->terminal) {
-        return true;
-    }
-
-    if (!isValid(x, y, dimensao, visitado)) {
-        return false;
-    }
-
-    int index = matriz[x][y] - 'A';
-    if (node->children[index] == NULL) {
-        return false;
-    }
-
-    visitado[x][y] = true;
-
-    int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
-    int dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
-
-    for (int i = 0; i < 8; i++) {
-        if (buscarPalavra(matriz, dimensao, x + dx[i], y + dy[i], node->children[index], visitado)) {
-            return true;
+void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, trienode *no, char *buffer, int profundidade, char **resultado, int *resultadoCount) {
+    if (no->terminal) {
+        buffer[profundidade] = '\0';
+        // Verifica se a palavra já está nos resultados
+        bool encontrada = false;
+        for (int i = 0; i < *resultadoCount; i++) {
+            if (strcmp(resultado[i], buffer) == 0) {
+                encontrada = true;
+                break;
+            }
+        }
+        if (!encontrada) {
+            resultado[*resultadoCount] = strdup(buffer);
+            (*resultadoCount)++;
         }
     }
 
-    visitado[x][y] = false; // Marca como não visitado para outras buscas
-    return false;
-}
-
-
-// Função principal para verificar se a palavra existe na matriz
-bool findWord(char** matriz, int dimensao, trienode* root) {
-    bool** visitado = (bool**)malloc(dimensao * sizeof(bool*));
-    for (int i = 0; i < dimensao; i++) {
-        visitado[i] = (bool*)calloc(dimensao, sizeof(bool));
+    if (x < 0 || x >= altura || y < 0 || y >= largura) {
+        return;
     }
 
-    for (int i = 0; i < dimensao; i++) {
-        for (int j = 0; j < dimensao; j++) {
-            if (buscarPalavra(matriz, dimensao, i, j, root, visitado)) {
-                for (int k = 0; k < dimensao; k++) {
-                    free(visitado[k]);
-                }
-                free(visitado);
-                return true;
+    int index = matriz[x][y] - 'A';
+    if (no->children[index]) {
+        buffer[profundidade] = matriz[x][y];
+        verificarDirecaoTrie(matriz, largura, altura, x + dx, y + dy, dx, dy, no->children[index], buffer, profundidade + 1, resultado, resultadoCount);
+    }
+}
+
+// Função principal para encontrar palavras da Trie no caça-palavras
+// Por enquanto, não adiciona em uma avl, apenas retorna um array de strings de palavras encontradas
+char **encontrarPalavrasNaTrie(char **matriz, int largura, int altura, trienode *raiz, int *quantidadePalavras) {
+    // Vetores para as 8 direções possíveis
+    int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
+    int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};
+
+    char buffer[altura * largura + 1];
+
+    // Array de resultados
+    char **resultado = (char **)malloc(altura * largura * sizeof(char *));
+    *quantidadePalavras = 0;
+
+    for (int x = 0; x < altura; x++) {
+        for (int y = 0; y < largura; y++) {
+            for (int d = 0; d < 8; d++) {
+                verificarDirecaoTrie(matriz, largura, altura, x, y, dx[d], dy[d], raiz, buffer, 0, resultado, quantidadePalavras);
             }
         }
     }
 
-    for (int i = 0; i < dimensao; i++) {
-        free(visitado[i]);
-    }
-    free(visitado);
-    return false;
+    return resultado;
 }
-
-
-
-
-
