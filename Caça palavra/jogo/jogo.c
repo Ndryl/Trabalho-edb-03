@@ -30,7 +30,7 @@ bool contemSubstring(const char *str, const char *sub) {
     return strstr(str, sub) != NULL; // Retorna true se encontrar a substring
 }
 char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
-   FILE* file = fopen(filename, "r");
+    FILE* file = fopen(filename, "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo\n");
         return NULL;
@@ -52,12 +52,30 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
         // Remove o '\n' do final da linha
         buffer[strcspn(buffer, "\n")] = '\0';
 
-        int len = strlen(buffer);
+        // Remove espaços da linha
+        char* linha_sem_espacos = malloc(strlen(buffer) + 1);
+        if (linha_sem_espacos == NULL) {
+            printf("Erro ao alocar memória\n");
+            fclose(file);
+            liberarMatriz(matriz, num_linhas);
+            return NULL;
+        }
+
+        int j = 0;
+        for (int i = 0; buffer[i] != '\0'; i++) {
+            if (buffer[i] != ' ') {
+                linha_sem_espacos[j++] = buffer[i];
+            }
+        }
+        linha_sem_espacos[j] = '\0';
+
+        int len = strlen(linha_sem_espacos);
 
         // Verifica se o comprimento das linhas é consistente com a largura informada
         if (len != *largura) {
             printf("Caça-palavras formato errado: largura inconsistente\n");
             fclose(file);
+            free(linha_sem_espacos);
             liberarMatriz(matriz, num_linhas);
             return NULL;
         }
@@ -67,6 +85,7 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
         if (matriz == NULL) {
             printf("Erro ao alocar memória\n");
             fclose(file);
+            free(linha_sem_espacos);
             liberarMatriz(matriz, num_linhas);
             return NULL;
         }
@@ -75,24 +94,19 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
         if (matriz[num_linhas] == NULL) {
             printf("Erro ao alocar memória\n");
             fclose(file);
+            free(linha_sem_espacos);
             liberarMatriz(matriz, num_linhas);
             return NULL;
         }
 
-        // Normaliza e copia a linha para a matriz
-        normalizarString(buffer, matriz[num_linhas]);
+        // Copia a linha sem espaços para a matriz
+        strcpy(matriz[num_linhas], linha_sem_espacos);
 
+        free(linha_sem_espacos); // Libera a memória temporária
         num_linhas++;
     }
 
     fclose(file);
-
-    // Verifica se o número de linhas é consistente com a altura informada
-    if (num_linhas != *altura) {
-        printf("Caça-palavras formato errado: altura inconsistente\n");
-        liberarMatriz(matriz, num_linhas);
-        return NULL;
-    }
 
     return matriz;
 }
