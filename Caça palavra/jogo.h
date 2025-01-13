@@ -7,7 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "../trie/trie.h"
+#include "trie.h"
 
 char** carregarCacaPalavras(char* filename, int* altura, int* largura);
 void carregarPalavras(char* filename, trienode **root);
