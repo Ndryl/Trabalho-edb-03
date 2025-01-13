@@ -144,21 +144,12 @@ void imprimirMatriz(char** matriz, int dimensao) {
     }
 }
 
-void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, trienode *no, char *buffer, int profundidade, char **resultado, int *resultadoCount) {
+void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
+                          trienode *no, char *buffer, int profundidade, Node **avl, int start[]) {
     if (no->terminal) {
         buffer[profundidade] = '\0';
-        // Verifica se a palavra já está nos resultados
-        bool encontrada = false;
-        for (int i = 0; i < *resultadoCount; i++) {
-            if (strcmp(resultado[i], buffer) == 0) {
-                encontrada = true;
-                break;
-            }
-        }
-        if (!encontrada) {
-            resultado[*resultadoCount] = strdup(buffer);
-            (*resultadoCount)++;
-        }
+        int end[2] = {x - dx, y - dy};
+        *avl = rInsert(*avl, buffer, start, end);
     }
 
     if (x < 0 || x >= altura || y < 0 || y >= largura) {
@@ -168,30 +159,21 @@ void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, 
     int index = matriz[x][y] - 'A';
     if (no->children[index]) {
         buffer[profundidade] = matriz[x][y];
-        verificarDirecaoTrie(matriz, largura, altura, x + dx, y + dy, dx, dy, no->children[index], buffer, profundidade + 1, resultado, resultadoCount);
+        verificarDirecaoTrie(matriz, largura, altura, x + dx, y + dy, dx, dy, no->children[index], buffer, profundidade + 1, avl, start);
     }
 }
 
-// Função principal para encontrar palavras da Trie no caça-palavras
-// Por enquanto, não adiciona em uma avl, apenas retorna um array de strings de palavras encontradas
-char **encontrarPalavrasNaTrie(char **matriz, int altura, int largura, trienode *raiz, int *quantidadePalavras) {
-    // Vetores para as 8 direções possíveis
+void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, trienode *raiz, Node **avl) {
     int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
     int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};
-
     char buffer[altura * largura + 1];
-
-    // Array de resultados
-    char **resultado = (char **)malloc(altura * largura * sizeof(char *));
-    *quantidadePalavras = 0;
 
     for (int x = 0; x < altura; x++) {
         for (int y = 0; y < largura; y++) {
             for (int d = 0; d < 8; d++) {
-                verificarDirecaoTrie(matriz, largura, altura, x, y, dx[d], dy[d], raiz, buffer, 0, resultado, quantidadePalavras);
+                int start[2] = {x, y};
+                verificarDirecaoTrie(matriz, largura, altura, x, y, dx[d], dy[d], raiz, buffer, 0, avl, start);
             }
         }
     }
-
-    return resultado;
 }

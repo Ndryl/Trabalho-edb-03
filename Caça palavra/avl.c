@@ -91,20 +91,24 @@ Node* InSucc(Node* p) {
 }
 
 // Inserção balanceada
-Node* rInsert(Node* p, char* key) {
+Node* rInsert(Node* p, char* key, int start[], int end[]){
     if (p == NULL) {
         Node* t = (Node*)malloc(sizeof(Node));
-        t->word = key;
+        t->word = strdup(key);
+        t->start[0] = start[0];
+        t->start[1] = start[1];
+        t->end[0] = end[0];
+        t->end[1] = end[1];
         t->lchild = NULL;
         t->rchild = NULL;
         t->height = 1;
         return t;
     }
 
-    if (strcmp(key, p->word) < 0) {
-        p->lchild = rInsert(p->lchild, key);
+   if (strcmp(key, p->word) < 0) {
+        p->lchild = rInsert(p->lchild, key, start, end);
     } else if (strcmp(key, p->word) > 0) {
-        p->rchild = rInsert(p->rchild, key);
+        p->rchild = rInsert(p->rchild, key, start, end);
     }
 
     p->height = NodeHeight(p);
@@ -168,17 +172,23 @@ Node* Delete(Node* p, char* key) {
 
 // Travessia em ordem
 void Inorder(Node* p) {
-    if (p) {
-        Inorder(p->lchild);
-        printf("%s ", p->word);
-        Inorder(p->rchild);
+    if (p == NULL) {
+        return;
     }
+    Inorder(p->lchild);
+    printf("Palavra: %s, Início: (%d, %d), Fim: (%d, %d)\n", 
+       p->word, 
+       p->start[0], p->start[1], 
+       p->end[0], p->end[1]);
+    Inorder(p->rchild);
+
 }
 //Libreração da árvore
 void FreeTree(Node* p) {
     if (p != NULL) {
         FreeTree(p->lchild); 
-        FreeTree(p->rchild); 
+        FreeTree(p->rchild);
+        free(p->word);
         free(p);             
     }
 }

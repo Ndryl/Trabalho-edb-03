@@ -7,12 +7,13 @@
 
 // Definição do nó da AVL
 typedef struct Node {
-    struct Node* lchild;
     char *word;
-    struct Node* rchild;
+    int start[2];  // Coordenadas de início [x, y]
+    int end[2];    // Coordenadas de fim [x, y]
+    struct Node *lchild;
+    struct Node *rchild;
     int height;
 } Node;
-
 
 // Funções para manipulação da árvore AVL
 int NodeHeight(Node* p);
@@ -23,7 +24,7 @@ Node* LRRotation(Node* p);
 Node* RLRotation(Node* p);
 Node* InPre(Node* p);
 Node* InSucc(Node* p);
-Node* rInsert(Node* p, char* key);
+Node* rInsert(Node* p, char* key, int start[], int end[]);
 Node* Delete(Node* p, char* key);
 void Inorder(Node* p);
 void FreeTree(Node* p);

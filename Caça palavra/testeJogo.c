@@ -27,20 +27,14 @@ int main() {
     printf("arvore atual:\n");
     printTries(root, "", 0);
 
-    int quantidadePalavras = 5;
-    char** palavras_econtradas = encontrarPalavrasNaTrie(matriz, altura, largura, root, &quantidadePalavras);
-    printf("Quantidade de palavras encontradas: %d\n", quantidadePalavras);
-    for(int i = 0; i < quantidadePalavras; i++) {
-        printf("%s ENCONTRADA\n", palavras_econtradas[i]);
-    }
+    Node* avl = NULL;
+    encontrarPalavrasNaTrie(matriz, altura, largura, root, &avl);
+
+    printf("Palavras encontradas (em AVL):\n");
+    Inorder(avl);
 
     liberarMatriz(matriz, dimensao);
     liberarTrie(root);
 
-    for(int i = 0; i < quantidadePalavras; i++) {
-        free(palavras_econtradas[i]);
-    }
-
-    free(palavras_econtradas);
     return 0;
 }

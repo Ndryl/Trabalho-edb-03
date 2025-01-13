@@ -1,5 +1,5 @@
-#ifndef AVL_H
-#define AVL_H
+#ifndef TRIE_H
+#define TRIE_H
 #include <stdio.h>    
 #include <string.h>   
 #include <stdbool.h>  
@@ -17,11 +17,5 @@ void printTries(trienode *root, char *prefix, int length);
 bool trieSearch(trienode *root, const char *word);
 void liberarTrie(trienode *root);
 trienode* buscarNo(trienode *root, const char *word);
-
-
-
-
-
-
 
 #endif
