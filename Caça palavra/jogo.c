@@ -60,15 +60,6 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
 
         int tamanho = strlen(linha_sem_espacos);
 
-        // Verifica se o comprimento das linhas é consistente com a largura informada
-        if (tamanho != *largura) {
-            printf("Caça-palavras formato errado: largura inconsistente\n");
-            fclose(file);
-            free(linha_sem_espacos);
-            liberarMatriz(matriz, num_linhas);
-            return NULL;
-        }
-
         // Aloca memória para armazenar a linha na matriz
         matriz = realloc(matriz, sizeof(char*) * (num_linhas + 1));
         if (matriz == NULL) {
@@ -109,7 +100,7 @@ void carregarPalavras(char* filename, trienode** root) {
     char normalizada[100];
     char line[1024];
     while (fgets(line, sizeof(line), file)) {
-        
+        // ignora espaços, tabs e quebras de linha entre as palavras
         char* word = strtok(line, " \t\n");
         while (word) {
             normalizarString(word, normalizada);
@@ -135,16 +126,17 @@ void imprimirMatriz(char** matriz, int dimensao) {
 
 void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
                           trienode *no, char *buffer, int profundidade, Node **avl, int start[]) {
+    //adiciona palavra encontrada na AVL
     if (no->terminal) {
         buffer[profundidade] = '\0';
         int end[2] = {x - dx, y - dy};
         *avl = rInsert(*avl, buffer, start, end);
     }
-
+    //verifica se a posição é válida
     if (x < 0 || x >= altura || y < 0 || y >= largura) {
         return;
     }
-
+    //continua a busca
     int index = matriz[x][y] - 'A';
     if (no->children[index]) {
         buffer[profundidade] = matriz[x][y];
@@ -152,11 +144,14 @@ void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, 
     }
 }
 
+//função principal para procurar palavras na matriz 
 void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, trienode *raiz, Node **avl) {
+    //direções
     int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
     int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};
     char buffer[altura * largura + 1];
 
+    //percorre todas as posições da matriz e procura por palavras
     for (int x = 0; x < altura; x++) {
         for (int y = 0; y < largura; y++) {
             for (int d = 0; d < 8; d++) {
