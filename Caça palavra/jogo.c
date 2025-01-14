@@ -58,10 +58,10 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
         }
         linha_sem_espacos[j] = '\0';
 
-        int len = strlen(linha_sem_espacos);
+        int tamanho = strlen(linha_sem_espacos);
 
         // Verifica se o comprimento das linhas é consistente com a largura informada
-        if (len != *largura) {
+        if (tamanho != *largura) {
             printf("Caça-palavras formato errado: largura inconsistente\n");
             fclose(file);
             free(linha_sem_espacos);
@@ -79,7 +79,7 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
             return NULL;
         }
 
-        matriz[num_linhas] = malloc((len + 1) * sizeof(char));
+        matriz[num_linhas] = malloc((tamanho + 1) * sizeof(char));
         if (matriz[num_linhas] == NULL) {
             printf("Erro ao alocar memória\n");
             fclose(file);
