@@ -13,7 +13,7 @@ typedef struct TrieNode {
 } TrieNode;
 TrieNode *createnode();
 bool trieinsert(TrieNode **raiz, char *palavra);
-void printTries(TrieNode *raiz, char *prefix, int comprimento);
+void printTrie(TrieNode *raiz, char *prefix, int comprimento);
 bool trieSearch(TrieNode *raiz, const char *palavra);
 void liberarTrie(TrieNode *raiz);
 TrieNode* buscarNo(TrieNode *raiz, const char *palavra);

@@ -25,7 +25,7 @@ int main() {
     carregarPalavras(palavras_filename, &raiz);
     //PRINT TRIE:
     printf("arvore atual:\n");
-    printTries(raiz, "", 0);
+    printTrie(raiz, "", 0);
 
     Node* avl = NULL;
     encontrarPalavrasNaTrie(matriz, altura, largura, raiz, &avl);
