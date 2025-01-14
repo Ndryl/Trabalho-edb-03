@@ -20,7 +20,7 @@ int main() {
     
     // Criar e popular o Trie
     printf("Criando o Trie com palavras...\n");
-    trienode* root = NULL;
+    TrieNode* root = NULL;
 
     carregarPalavras(words_filename, &root);
     //PRINT TRIE:

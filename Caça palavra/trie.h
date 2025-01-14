@@ -7,15 +7,15 @@
 #include <ctype.h>
 #define NUM_CHARS 26  
 
-typedef struct trienode {
-    struct trienode *children[NUM_CHARS];  // Array de ponteiros para os filhos, representando cada letra
+typedef struct TrieNode {
+    struct TrieNode *children[NUM_CHARS];  // Array de ponteiros para os filhos, representando cada letra
     bool terminal;                        // Indica se o nó é o final de uma palavra (true) ou não (false)
-} trienode;
-trienode *createnode();
-bool trieinsert(trienode **root, char *word);
-void printTries(trienode *root, char *prefix, int length);
-bool trieSearch(trienode *root, const char *word);
-void liberarTrie(trienode *root);
-trienode* buscarNo(trienode *root, const char *word);
+} TrieNode;
+TrieNode *createnode();
+bool trieinsert(TrieNode **root, char *word);
+void printTries(TrieNode *root, char *prefix, int length);
+bool trieSearch(TrieNode *root, const char *word);
+void liberarTrie(TrieNode *root);
+TrieNode* buscarNo(TrieNode *root, const char *word);
 
 #endif

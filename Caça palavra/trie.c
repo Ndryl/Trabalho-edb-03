@@ -1,7 +1,7 @@
 #include "trie.h"
 
-trienode *createnode() {
-    trienode *newnode = malloc(sizeof(*newnode));
+TrieNode *createnode() {
+    TrieNode *newnode = malloc(sizeof(*newnode));
     for (int i = 0; i < NUM_CHARS; i++) {
         newnode->children[i] = NULL;
     }
@@ -29,7 +29,7 @@ void normalizar_string(const char* origem, char* destino) {
 
 
 
-bool trieinsert(trienode **root, char *word) {
+bool trieinsert(TrieNode **root, char *word) {
     if (*root == NULL) {
         *root = createnode();  
     }
@@ -38,7 +38,7 @@ bool trieinsert(trienode **root, char *word) {
     normalizar_string(word, normalizada);  // Normalizar a palavra (caps e sem acento)
 
     unsigned char *text = (unsigned char *)normalizada;  
-    trienode *current = *root;                    
+    TrieNode *current = *root;                    
     int length = strlen(normalizada);
 
     for (int i = 0; i < length; i++) {
@@ -65,12 +65,12 @@ bool trieinsert(trienode **root, char *word) {
 }
 
 
-bool trieSearch(trienode *root, const char *word) {
+bool trieSearch(TrieNode *root, const char *word) {
     if (root == NULL) {
         return false;
     }
 
-    trienode *current = root;
+    TrieNode *current = root;
     for (int i = 0; word[i] != '\0'; i++) {
         int index = word[i] - 'a';
 
@@ -84,7 +84,7 @@ bool trieSearch(trienode *root, const char *word) {
     return current->terminal;
 }
 
-void printTries(trienode *root, char *prefix, int length) {
+void printTries(TrieNode *root, char *prefix, int length) {
     if (root == NULL) return;  
 
     char newprefix[length + 2];    
@@ -104,7 +104,7 @@ void printTries(trienode *root, char *prefix, int length) {
         }
     }
 }
-void liberarTrie(trienode *root) {
+void liberarTrie(TrieNode *root) {
     if (root == NULL) return;
 
     for (int i = 0; i < NUM_CHARS; i++) {
@@ -112,12 +112,12 @@ void liberarTrie(trienode *root) {
     }
     free(root);
 }
-trienode* buscarNo(trienode *root, const char *word) {
+TrieNode* buscarNo(TrieNode *root, const char *word) {
     if (root == NULL) {
         return NULL;
     }
 
-    trienode *current = root;
+    TrieNode *current = root;
     for (int i = 0; word[i] != '\0'; i++) {
         int index = toupper(word[i]) - 'A';
         if (index < 0 || index >= NUM_CHARS || current->children[index] == NULL) {
