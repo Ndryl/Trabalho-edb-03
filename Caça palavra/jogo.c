@@ -118,13 +118,13 @@ void liberarMatriz(char** matriz, int linhas) {
         free(matriz);
     }
 }
-void imprimirMatriz(char** matriz, int dimensao) {
-    for (int i = 0; i < dimensao; i++) {
+void imprimirMatriz(char** matriz, int linhas) {
+    for (int i = 0; i < linhas; i++) {
         printf("%s\n", matriz[i]);
     }
 }
 
-void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
+void buscarPalavrasEmUmaDirecao(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
                           TrieAvlNode *no, char *buffer, int profundidade, AvlNode **avl, int start[]) {
     //adiciona palavra encontrada na AVL
     if (no->terminal) {
@@ -140,12 +140,12 @@ void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, 
     int index = matriz[x][y] - 'A';
     if (no->children[index]) {
         buffer[profundidade] = matriz[x][y];
-        verificarDirecaoTrie(matriz, largura, altura, x + dx, y + dy, dx, dy, no->children[index], buffer, profundidade + 1, avl, start);
+        buscarPalavrasEmUmaDirecao(matriz, largura, altura, x + dx, y + dy, dx, dy, no->children[index], buffer, profundidade + 1, avl, start);
     }
 }
 
 //função principal para procurar palavras na matriz 
-void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieAvlNode *raiz, AvlNode **avl) {
+void encontrarPalavrasNaMatriz(char **matriz, int altura, int largura, TrieAvlNode *raiz, AvlNode **avl) {
     //direções
     int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
     int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};
@@ -156,7 +156,7 @@ void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieAvlNode
         for (int y = 0; y < largura; y++) {
             for (int d = 0; d < 8; d++) {
                 int start[2] = {x, y};
-                verificarDirecaoTrie(matriz, largura, altura, x, y, dx[d], dy[d], raiz, buffer, 0, avl, start);
+                buscarPalavrasEmUmaDirecao(matriz, largura, altura, x, y, dx[d], dy[d], raiz, buffer, 0, avl, start);
             }
         }
     }

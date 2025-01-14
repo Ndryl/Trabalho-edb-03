@@ -16,17 +16,17 @@ typedef struct AvlNode {
 } AvlNode;
 
 
-int AvlNodeHeight(AvlNode* p);
-int BalanceFactor(AvlNode* p);
+int avlNodeHeight(AvlNode* p);
+int balanceFactor(AvlNode* p);
 AvlNode* LLRotation(AvlNode* p);
 AvlNode* RRRotation(AvlNode* p);
 AvlNode* LRRotation(AvlNode* p);
 AvlNode* RLRotation(AvlNode* p);
-AvlNode* InPre(AvlNode* p);
+AvlNode* inPre(AvlNode* p);
 AvlNode* InSucc(AvlNode* p);
 AvlNode* rInsert(AvlNode* p, char* key, int start[], int end[]);
-AvlNode* Delete(AvlNode* p, char* key);
-void Inorder(AvlNode* p);
-void FreeTree(AvlNode* p);
+AvlNode* delete(AvlNode* p, char* key);
+void printInOrder(AvlNode* p);
+void freeTree(AvlNode* p);
 
 #endif 
