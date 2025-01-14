@@ -16,8 +16,11 @@ As principais funcionalidades incluem:
 O projeto contém os seguintes arquivos principais:
 
 - **jogo.c**: Implementação das funções principais do jogo.
-- **testeJogo.c**: Arquivo de testes para verificar o funcionamento das funções.
-- **caca_palavras.txt**: Exemplo de arquivo com a matriz de caça-palavras (se necessário para testes).
+- **main.c**: Arquivo principal para rodar o programa.
+- **avl.c**: Implementação da árvore AVL.
+- **trie.c**: Implementação da Trie.
+- **cacaPalavra.txt**: Exemplo de arquivo com a matriz de caça-palavra.
+- **palavras**: Exemplo de arquivo com palavras a serem buscadas na matriz.
 
 ### Funções principais
 
@@ -29,44 +32,24 @@ As funções utilizadas no projeto incluem:
 2. **normalizar_string**:
    - Remove acentuação das letras e as converte para maiúsculas.
 
-3. **liberarMatriz**:
-   - Libera a memória alocada para a matriz de caça-palavras.
+3. **encontrarPalavrasNaMatriz**:
+   - Procurar as palavras na matriz e inserir na árvore AVL.
 
-4. **imprimirMatriz**:
-   - Imprime a matriz de caça-palavras na tela para visualização.
-
-5. **contemSubstring**:
-   - Verifica se uma substring existe dentro de uma string.
-
-6. **findWord**:
-   - Busca uma palavra na matriz em várias direções (horizontal, vertical, diagonal, e reversa).
-
-## Teste Básico
-
-O arquivo `testeJogo.c` contém um teste básico para verificar o funcionamento das funções principais, em especial a busca de palavras na matriz.
+4. **carregarPalavras**:
+   - Carrega o arquivo de texto com as palavras e insere na Trie.
 
 ### Como executar:
 
 1. Compile o código com o comando:
 
     ```bash
-    gcc jogo.c testeJogo.c -o testeJogo
+    make
     ```
 
 2. Execute o programa:
 
     ```bash
-    ./testeJogo
+    ./jogo
     ```
 
-### Exemplo de saída:
 
-```bash
-Matriz de Caça-Palavras:
-EXEMP
-EXAMP
-MPLAE
-PEMLO
-LOEXM
-
-A palavra 'EXEMPLO' não foi encontrada!
