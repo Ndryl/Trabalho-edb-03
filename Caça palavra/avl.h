@@ -7,7 +7,7 @@
 
 // Definição do nó da AVL
 typedef struct Node {
-    char *word;
+    char *palavra;
     int start[2];  // Coordenadas de início [x, y]
     int end[2];    // Coordenadas de fim [x, y]
     struct Node *lchild;

@@ -94,7 +94,7 @@ Node* InSucc(Node* p) {
 Node* rInsert(Node* p, char* key, int start[], int end[]){
     if (p == NULL) {
         Node* t = (Node*)malloc(sizeof(Node));
-        t->word = strdup(key);
+        t->palavra = strdup(key);
         t->start[0] = start[0];
         t->start[1] = start[1];
         t->end[0] = end[0];
@@ -105,9 +105,9 @@ Node* rInsert(Node* p, char* key, int start[], int end[]){
         return t;
     }
 
-   if (strcmp(key, p->word) < 0) {
+   if (strcmp(key, p->palavra) < 0) {
         p->lchild = rInsert(p->lchild, key, start, end);
-    } else if (strcmp(key, p->word) > 0) {
+    } else if (strcmp(key, p->palavra) > 0) {
         p->rchild = rInsert(p->rchild, key, start, end);
     }
 
@@ -138,20 +138,20 @@ Node* Delete(Node* p, char* key) {
         return NULL;
     }
 
-    if (strcmp(key, p->word) < 0) {
+    if (strcmp(key, p->palavra) < 0) {
         p->lchild = Delete(p->lchild, key);
-    } else if (strcmp(key, p->word) > 0) {
+    } else if (strcmp(key, p->palavra) > 0) {
         p->rchild = Delete(p->rchild, key);
     } else {
         Node* q;
         if (NodeHeight(p->lchild) > NodeHeight(p->rchild)) {
             q = InPre(p->lchild);
-            p->word = q->word;
-            p->lchild = Delete(p->lchild, q->word);
+            p->palavra = q->palavra;
+            p->lchild = Delete(p->lchild, q->palavra);
         } else {
             q = InSucc(p->rchild);
-            p->word = q->word;
-            p->rchild = Delete(p->rchild, q->word);
+            p->palavra = q->palavra;
+            p->rchild = Delete(p->rchild, q->palavra);
         }
     }
 
@@ -177,7 +177,7 @@ void Inorder(Node* p) {
     }
     Inorder(p->lchild);
     printf("Palavra: %s, Início: (%d, %d), Fim: (%d, %d)\n", 
-       p->word, 
+       p->palavra, 
        p->start[0], p->start[1], 
        p->end[0], p->end[1]);
     Inorder(p->rchild);
@@ -188,7 +188,7 @@ void FreeTree(Node* p) {
     if (p != NULL) {
         FreeTree(p->lchild); 
         FreeTree(p->rchild);
-        free(p->word);
+        free(p->palavra);
         free(p);             
     }
 }

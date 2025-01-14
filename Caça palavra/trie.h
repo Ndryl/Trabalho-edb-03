@@ -12,10 +12,10 @@ typedef struct TrieNode {
     bool terminal;                        // Indica se o nó é o final de uma palavra (true) ou não (false)
 } TrieNode;
 TrieNode *createnode();
-bool trieinsert(TrieNode **root, char *word);
-void printTries(TrieNode *root, char *prefix, int length);
-bool trieSearch(TrieNode *root, const char *word);
-void liberarTrie(TrieNode *root);
-TrieNode* buscarNo(TrieNode *root, const char *word);
+bool trieinsert(TrieNode **raiz, char *palavra);
+void printTries(TrieNode *raiz, char *prefix, int comprimento);
+bool trieSearch(TrieNode *raiz, const char *palavra);
+void liberarTrie(TrieNode *raiz);
+TrieNode* buscarNo(TrieNode *raiz, const char *palavra);
 
 #endif

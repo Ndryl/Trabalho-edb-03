@@ -12,7 +12,7 @@
 
 
 char** carregarCacaPalavras(char* filename, int* altura, int* largura);
-void carregarPalavras(char* filename, TrieNode **root);
+void carregarPalavras(char* filename, TrieNode **raiz);
 void liberarMatriz(char** matriz, int linhas);
 void imprimirMatriz(char** matriz, int dimensao);
 void normalizarString(const char* origem, char* destino);

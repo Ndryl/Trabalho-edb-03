@@ -29,19 +29,19 @@ void normalizar_string(const char* origem, char* destino) {
 
 
 
-bool trieinsert(TrieNode **root, char *word) {
-    if (*root == NULL) {
-        *root = createnode();  
+bool trieinsert(TrieNode **raiz, char *palavra) {
+    if (*raiz == NULL) {
+        *raiz = createnode();  
     }
 
     char normalizada[100];  // Buffer para armazenar a palavra normalizada
-    normalizar_string(word, normalizada);  // Normalizar a palavra (caps e sem acento)
+    normalizar_string(palavra, normalizada);  // Normalizar a palavra (caps e sem acento)
 
     unsigned char *text = (unsigned char *)normalizada;  
-    TrieNode *current = *root;                    
-    int length = strlen(normalizada);
+    TrieNode *current = *raiz;                    
+    int comprimento = strlen(normalizada);
 
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < comprimento; i++) {
         int index = text[i] - 'A';  // Índice baseado em letras maiúsculas (A-Z)
 
         if (index < 0 || index >= NUM_CHARS) {
@@ -65,14 +65,14 @@ bool trieinsert(TrieNode **root, char *word) {
 }
 
 
-bool trieSearch(TrieNode *root, const char *word) {
-    if (root == NULL) {
+bool trieSearch(TrieNode *raiz, const char *palavra) {
+    if (raiz == NULL) {
         return false;
     }
 
-    TrieNode *current = root;
-    for (int i = 0; word[i] != '\0'; i++) {
-        int index = word[i] - 'a';
+    TrieNode *current = raiz;
+    for (int i = 0; palavra[i] != '\0'; i++) {
+        int index = palavra[i] - 'a';
 
         if (index < 0 || index >= NUM_CHARS || current->children[index] == NULL) {
             return false;
@@ -84,42 +84,42 @@ bool trieSearch(TrieNode *root, const char *word) {
     return current->terminal;
 }
 
-void printTries(TrieNode *root, char *prefix, int length) {
-    if (root == NULL) return;  
+void printTries(TrieNode *raiz, char *prefix, int comprimento) {
+    if (raiz == NULL) return;  
 
-    char newprefix[length + 2];    
-    memcpy(newprefix, prefix, length); 
-    newprefix[length] = '\0';  
+    char newprefix[comprimento + 2];    
+    memcpy(newprefix, prefix, comprimento); 
+    newprefix[comprimento] = '\0';  
 
-    if (root->terminal) {
+    if (raiz->terminal) {
         printf("%s\n", newprefix); 
     }
 
    
     for (int i = 0; i < NUM_CHARS; i++) {
-        if (root->children[i] != NULL) {
+        if (raiz->children[i] != NULL) {
          
-            newprefix[length] = 'A' + i;
-            printTries(root->children[i], newprefix, length + 1); 
+            newprefix[comprimento] = 'A' + i;
+            printTries(raiz->children[i], newprefix, comprimento + 1); 
         }
     }
 }
-void liberarTrie(TrieNode *root) {
-    if (root == NULL) return;
+void liberarTrie(TrieNode *raiz) {
+    if (raiz == NULL) return;
 
     for (int i = 0; i < NUM_CHARS; i++) {
-        liberarTrie(root->children[i]);
+        liberarTrie(raiz->children[i]);
     }
-    free(root);
+    free(raiz);
 }
-TrieNode* buscarNo(TrieNode *root, const char *word) {
-    if (root == NULL) {
+TrieNode* buscarNo(TrieNode *raiz, const char *palavra) {
+    if (raiz == NULL) {
         return NULL;
     }
 
-    TrieNode *current = root;
-    for (int i = 0; word[i] != '\0'; i++) {
-        int index = toupper(word[i]) - 'A';
+    TrieNode *current = raiz;
+    for (int i = 0; palavra[i] != '\0'; i++) {
+        int index = toupper(palavra[i]) - 'A';
         if (index < 0 || index >= NUM_CHARS || current->children[index] == NULL) {
             return NULL;
         }

@@ -91,7 +91,7 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
     return matriz;
 }
 
-void carregarPalavras(char* filename, TrieNode** root) {
+void carregarPalavras(char* filename, TrieNode** raiz) {
     FILE* file = fopen(filename, "r");
     if (!file) {
         perror("Erro ao abrir o arquivo");
@@ -101,11 +101,11 @@ void carregarPalavras(char* filename, TrieNode** root) {
     char line[1024];
     while (fgets(line, sizeof(line), file)) {
         // ignora espaços, tabs e quebras de linha entre as palavras
-        char* word = strtok(line, " \t\n");
-        while (word) {
-            normalizarString(word, normalizada);
-            trieinsert(root, normalizada);
-            word = strtok(NULL, " \t\n"); 
+        char* palavra = strtok(line, " \t\n");
+        while (palavra) {
+            normalizarString(palavra, normalizada);
+            trieinsert(raiz, normalizada);
+            palavra = strtok(NULL, " \t\n"); 
         }
     }
 }

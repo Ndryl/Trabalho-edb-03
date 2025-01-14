@@ -3,7 +3,7 @@
 
 int main() {
     char* filename = "cacaPalavra.txt";
-    char* words_filename = "palavras.txt";
+    char* palavras_filename = "palavras.txt";
     int dimensao = 0;
     int largura = -1;
     int altura = -1;
@@ -20,21 +20,21 @@ int main() {
     
     // Criar e popular o Trie
     printf("Criando o Trie com palavras...\n");
-    TrieNode* root = NULL;
+    TrieNode* raiz = NULL;
 
-    carregarPalavras(words_filename, &root);
+    carregarPalavras(palavras_filename, &raiz);
     //PRINT TRIE:
     printf("arvore atual:\n");
-    printTries(root, "", 0);
+    printTries(raiz, "", 0);
 
     Node* avl = NULL;
-    encontrarPalavrasNaTrie(matriz, altura, largura, root, &avl);
+    encontrarPalavrasNaTrie(matriz, altura, largura, raiz, &avl);
 
     printf("Palavras encontradas (em AVL):\n");
     Inorder(avl);
 
     liberarMatriz(matriz, dimensao);
-    liberarTrie(root);
+    liberarTrie(raiz);
     FreeTree(avl);
     return 0;
 }
