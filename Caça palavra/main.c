@@ -20,14 +20,14 @@ int main() {
     
     // Criar e popular o Trie
     printf("Criando o Trie com palavras...\n");
-    TrieNode* raiz = NULL;
+    TrieAvlNode* raiz = NULL;
 
     carregarPalavras(palavras_filename, &raiz);
     //PRINT TRIE:
     printf("arvore atual:\n");
     printTrie(raiz, "", 0);
 
-    Node* avl = NULL;
+    AvlNode* avl = NULL;
     encontrarPalavrasNaTrie(matriz, altura, largura, raiz, &avl);
 
     printf("Palavras encontradas (em AVL):\n");

@@ -91,7 +91,7 @@ char** carregarCacaPalavras(char* filename, int* altura, int* largura) {
     return matriz;
 }
 
-void carregarPalavras(char* filename, TrieNode** raiz) {
+void carregarPalavras(char* filename, TrieAvlNode** raiz) {
     FILE* file = fopen(filename, "r");
     if (!file) {
         perror("Erro ao abrir o arquivo");
@@ -125,7 +125,7 @@ void imprimirMatriz(char** matriz, int dimensao) {
 }
 
 void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
-                          TrieNode *no, char *buffer, int profundidade, Node **avl, int start[]) {
+                          TrieAvlNode *no, char *buffer, int profundidade, AvlNode **avl, int start[]) {
     //adiciona palavra encontrada na AVL
     if (no->terminal) {
         buffer[profundidade] = '\0';
@@ -145,7 +145,7 @@ void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, 
 }
 
 //função principal para procurar palavras na matriz 
-void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieNode *raiz, Node **avl) {
+void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieAvlNode *raiz, AvlNode **avl) {
     //direções
     int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
     int dy[] = {1, -1, 0, 0, 1, -1, -1, 1};

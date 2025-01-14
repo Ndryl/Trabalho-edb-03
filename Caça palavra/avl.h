@@ -6,27 +6,27 @@
 #include <string.h>
 
 // Definição do nó da AVL
-typedef struct Node {
+typedef struct AvlNode {
     char *palavra;
     int start[2];  // Coordenadas de início [x, y]
     int end[2];    // Coordenadas de fim [x, y]
-    struct Node *lchild;
-    struct Node *rchild;
+    struct AvlNode *lchild;
+    struct AvlNode *rchild;
     int height;
-} Node;
+} AvlNode;
 
-// Funções para manipulação da árvore AVL
-int NodeHeight(Node* p);
-int BalanceFactor(Node* p);
-Node* LLRotation(Node* p);
-Node* RRRotation(Node* p);
-Node* LRRotation(Node* p);
-Node* RLRotation(Node* p);
-Node* InPre(Node* p);
-Node* InSucc(Node* p);
-Node* rInsert(Node* p, char* key, int start[], int end[]);
-Node* Delete(Node* p, char* key);
-void Inorder(Node* p);
-void FreeTree(Node* p);
+
+int AvlNodeHeight(AvlNode* p);
+int BalanceFactor(AvlNode* p);
+AvlNode* LLRotation(AvlNode* p);
+AvlNode* RRRotation(AvlNode* p);
+AvlNode* LRRotation(AvlNode* p);
+AvlNode* RLRotation(AvlNode* p);
+AvlNode* InPre(AvlNode* p);
+AvlNode* InSucc(AvlNode* p);
+AvlNode* rInsert(AvlNode* p, char* key, int start[], int end[]);
+AvlNode* Delete(AvlNode* p, char* key);
+void Inorder(AvlNode* p);
+void FreeTree(AvlNode* p);
 
 #endif 

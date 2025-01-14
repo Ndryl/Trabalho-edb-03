@@ -1,48 +1,48 @@
 #include "avl.h"
 
 // Funções auxiliares para cálculo de altura e balanceamento
-int NodeHeight(Node* p) {
+int AvlNodeHeight(AvlNode* p) {
     int hl = (p && p->lchild) ? p->lchild->height : 0;
     int hr = (p && p->rchild) ? p->rchild->height : 0;
     return hl > hr ? hl + 1 : hr + 1;
 }
 
-int BalanceFactor(Node* p) {
+int BalanceFactor(AvlNode* p) {
     int hl = (p && p->lchild) ? p->lchild->height : 0;
     int hr = (p && p->rchild) ? p->rchild->height : 0;
     return hl - hr;
 }
 
 // Rotações
-Node* LLRotation(Node* p) {
-    Node* pl = p->lchild;
-    Node* plr = pl->rchild;
+AvlNode* LLRotation(AvlNode* p) {
+    AvlNode* pl = p->lchild;
+    AvlNode* plr = pl->rchild;
 
     pl->rchild = p;
     p->lchild = plr;
 
-    p->height = NodeHeight(p);
-    pl->height = NodeHeight(pl);
+    p->height = AvlNodeHeight(p);
+    pl->height = AvlNodeHeight(pl);
 
     return pl;
 }
 
-Node* RRRotation(Node* p) {
-    Node* pr = p->rchild;
-    Node* prl = pr->lchild;
+AvlNode* RRRotation(AvlNode* p) {
+    AvlNode* pr = p->rchild;
+    AvlNode* prl = pr->lchild;
 
     pr->lchild = p;
     p->rchild = prl;
 
-    p->height = NodeHeight(p);
-    pr->height = NodeHeight(pr);
+    p->height = AvlNodeHeight(p);
+    pr->height = AvlNodeHeight(pr);
 
     return pr;
 }
 
-Node* LRRotation(Node* p) {
-    Node* pl = p->lchild;
-    Node* plr = pl->rchild;
+AvlNode* LRRotation(AvlNode* p) {
+    AvlNode* pl = p->lchild;
+    AvlNode* plr = pl->rchild;
 
     pl->rchild = plr->lchild;
     p->lchild = plr->rchild;
@@ -50,16 +50,16 @@ Node* LRRotation(Node* p) {
     plr->lchild = pl;
     plr->rchild = p;
 
-    pl->height = NodeHeight(pl);
-    p->height = NodeHeight(p);
-    plr->height = NodeHeight(plr);
+    pl->height = AvlNodeHeight(pl);
+    p->height = AvlNodeHeight(p);
+    plr->height = AvlNodeHeight(plr);
 
     return plr;
 }
 
-Node* RLRotation(Node* p) {
-    Node* pr = p->rchild;
-    Node* prl = pr->lchild;
+AvlNode* RLRotation(AvlNode* p) {
+    AvlNode* pr = p->rchild;
+    AvlNode* prl = pr->lchild;
 
     pr->lchild = prl->rchild;
     p->rchild = prl->lchild;
@@ -67,15 +67,15 @@ Node* RLRotation(Node* p) {
     prl->rchild = pr;
     prl->lchild = p;
 
-    pr->height = NodeHeight(pr);
-    p->height = NodeHeight(p);
-    prl->height = NodeHeight(prl);
+    pr->height = AvlNodeHeight(pr);
+    p->height = AvlNodeHeight(p);
+    prl->height = AvlNodeHeight(prl);
 
     return prl;
 }
 
 // Função para encontrar o predecessor em ordem
-Node* InPre(Node* p) {
+AvlNode* InPre(AvlNode* p) {
     while (p && p->rchild != NULL) {
         p = p->rchild;
     }
@@ -83,7 +83,7 @@ Node* InPre(Node* p) {
 }
 
 // Função para encontrar o sucessor em ordem
-Node* InSucc(Node* p) {
+AvlNode* InSucc(AvlNode* p) {
     while (p && p->lchild != NULL) {
         p = p->lchild;
     }
@@ -91,9 +91,9 @@ Node* InSucc(Node* p) {
 }
 
 // Inserção balanceada
-Node* rInsert(Node* p, char* key, int start[], int end[]){
+AvlNode* rInsert(AvlNode* p, char* key, int start[], int end[]){
     if (p == NULL) {
-        Node* t = (Node*)malloc(sizeof(Node));
+        AvlNode* t = (AvlNode*)malloc(sizeof(AvlNode));
         t->palavra = strdup(key);
         t->start[0] = start[0];
         t->start[1] = start[1];
@@ -111,7 +111,7 @@ Node* rInsert(Node* p, char* key, int start[], int end[]){
         p->rchild = rInsert(p->rchild, key, start, end);
     }
 
-    p->height = NodeHeight(p);
+    p->height = AvlNodeHeight(p);
 
     // Balanceamento
     if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 1) {
@@ -128,7 +128,7 @@ Node* rInsert(Node* p, char* key, int start[], int end[]){
 }
 
 // Remoção balanceada
-Node* Delete(Node* p, char* key) {
+AvlNode* Delete(AvlNode* p, char* key) {
     if (p == NULL) {
         return NULL;
     }
@@ -143,8 +143,8 @@ Node* Delete(Node* p, char* key) {
     } else if (strcmp(key, p->palavra) > 0) {
         p->rchild = Delete(p->rchild, key);
     } else {
-        Node* q;
-        if (NodeHeight(p->lchild) > NodeHeight(p->rchild)) {
+        AvlNode* q;
+        if (AvlNodeHeight(p->lchild) > AvlNodeHeight(p->rchild)) {
             q = InPre(p->lchild);
             p->palavra = q->palavra;
             p->lchild = Delete(p->lchild, q->palavra);
@@ -155,7 +155,7 @@ Node* Delete(Node* p, char* key) {
         }
     }
 
-    p->height = NodeHeight(p);
+    p->height = AvlNodeHeight(p);
 
     if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 1) {
         return LLRotation(p);
@@ -171,7 +171,7 @@ Node* Delete(Node* p, char* key) {
 }
 
 // Travessia em ordem
-void Inorder(Node* p) {
+void Inorder(AvlNode* p) {
     if (p == NULL) {
         return;
     }
@@ -184,7 +184,7 @@ void Inorder(Node* p) {
 
 }
 //Libreração da árvore
-void FreeTree(Node* p) {
+void FreeTree(AvlNode* p) {
     if (p != NULL) {
         FreeTree(p->lchild); 
         FreeTree(p->rchild);

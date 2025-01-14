@@ -12,13 +12,13 @@
 
 
 char** carregarCacaPalavras(char* filename, int* altura, int* largura);
-void carregarPalavras(char* filename, TrieNode **raiz);
+void carregarPalavras(char* filename, TrieAvlNode **raiz);
 void liberarMatriz(char** matriz, int linhas);
 void imprimirMatriz(char** matriz, int dimensao);
 void normalizarString(const char* origem, char* destino);
 
-void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieNode *raiz, Node **avl);
+void encontrarPalavrasNaTrie(char **matriz, int altura, int largura, TrieAvlNode *raiz, AvlNode **avl);
 void verificarDirecaoTrie(char **matriz, int largura, int altura, int x, int y, int dx, int dy, 
-                          TrieNode *no, char *buffer, int profundidade, Node **avl, int start[]);
+                          TrieAvlNode *no, char *buffer, int profundidade, AvlNode **avl, int start[]);
 
 #endif
