@@ -24,8 +24,7 @@ int main() {
     AvlNode* avl = NULL;
     encontrarPalavrasNaMatriz(matriz, altura, largura, raiz, &avl);
 
-    //printf("Palavras encontradas (em AVL):\n");
-    //printInOrder(avl);
+
     int escolha = -1;
     while (escolha != 0) {
         printOpcoes();
@@ -44,6 +43,15 @@ int main() {
                 printf("Palavras encontradas:\n");
                 printInOrder(avl);
                 break;
+            case 4:
+                printf("Digite a palavra que deseja excluir: ");
+                char palavra[100];
+                scanf("%s", palavra);
+                char normalizada[100];
+                normalizarString(palavra, normalizada);
+                avl = delete(avl, normalizada);
+                printf("palavra %s excluída\n", normalizada);
+                break;
             default:
                 printf("Opção inválida\n");
                 break;
@@ -61,5 +69,6 @@ void printOpcoes() {
     printf("1 - Mostrar matriz\n");
     printf("2 - Mostrar palavras na trie\n");
     printf("3 - Mostrar palavras na avl (palavras encontradas)\n");
+    printf("4 - Excluir palavra da avl\n");
     printf("Opção: ");
 }
